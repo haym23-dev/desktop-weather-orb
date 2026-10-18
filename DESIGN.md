@@ -17,3 +17,23 @@ This is lit up inside the opaque orb to emulate the weather currently taking pla
 ### LCD Display
 
 This is done to show the user the current location, and give other metrics like temperature, AQI, and weather for the coming days. The current design is to use a ST77916 QSPI LCD Display, measuring 1.53 inches in diameter.
+
+## Hardware Info
+
+### ESP32-WROOM-32D
+
+The board used for this is the ESP32-WROOM-32D. This can be compiled in the regular esp32 environment.
+
+### ST77916 QSPI LCD Display
+
+The display is a single chip TFT-LCD controller driver supporting 262k colors and a 360x360 resolution, at 1.53 inches in diameter. It uses QSPI and has the following pinouts on its dev board:
+
+- **VCC:** Input voltage, range is 3.3V to 5V
+- **GND:** Ground
+- **SCL:** Clock
+- **SDA:** Data line 0, Master Out Slave In (MOSI)
+- **IO1:** Data line 1, Master In Slave Out (MISO)
+- **IO2:** Data line 2, Write Protect (WP)
+- **IO3:** Data line 3, Hold/Reset (HD)
+- **CS:** Chip Select (CS)
+- **BL:** Backlight

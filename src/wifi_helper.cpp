@@ -1,19 +1,18 @@
-#include <WiFi.h>
+#include "wifi_helper.h"
+#include "secrets.h"
 
-namespace {
-  const char *SSID = "Smartaira360";
-  const char *PASSWORD = "postagebroiler";
-}
+#include <Arduino.h>
+#include <WiFi.h>
 
 // WiFi connection
 void connectToWifi() {
   // Set WiFi mode to Station
   WiFi.mode(WIFI_STA);
-  WiFi.begin(SSID, PASSWORD);
+  WiFi.begin(Secrets::SSID_NAME, Secrets::WIFI_PASSWORD);
 
   Serial.println();
   Serial.print("Connected to: ");
-  Serial.println(SSID);
+  Serial.println(Secrets::SSID_NAME);
 
   while (WiFi.status() != WL_CONNECT_FAILED) {
     delay(500);

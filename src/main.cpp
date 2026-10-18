@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include "wifi.h"
+
+#include "wifi_helper.h"
 
 void setup() {
   Serial.begin(115200);
