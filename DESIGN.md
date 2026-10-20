@@ -35,5 +35,5 @@ The display is a single chip TFT-LCD controller driver supporting 262k colors an
 - **IO1:** Data line 1, Master In Slave Out (MISO)
 - **IO2:** Data line 2, Write Protect (WP)
 - **IO3:** Data line 3, Hold/Reset (HD)
-- **CS:** Chip Select (CS)
+- **CS:** Chip Select
 - **BL:** Backlight
