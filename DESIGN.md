@@ -1,6 +1,6 @@
 # Weather Orb
 
-This repo is the firmware and designs for the Weather Orb, a desktop ornament for the current weather outside, emulating the current weather right on your desk. This is done with an ESP32, RGB LED Strip, and small LCD Display, along with a web app for configuration.
+This repo is the firmware and designs for the Weather Orb, a desktop ornament for the current weather outside, emulating the current weather right on your desk. This is done with an ESP32-S3, RGB LED Strip, and small LCD Display, along with a web app for configuration.
 
 ## Problem Breakdown
 
@@ -20,9 +20,9 @@ This is done to show the user the current location, and give other metrics like 
 
 ## Hardware Info
 
-### ESP32-WROOM-32D
+### ESP32-S3
 
-The board used for this is the ESP32-WROOM-32D. This can be compiled in the regular esp32 environment.
+The board used for this is the ESP32-S3 Super Mini. Originally the ESP32-WROOM-32D was chosen, but the QSPI display required more RAM than could be provided. The ESP32-S3 has 2 MB of PSRAM that can be used for the QSPI display.
 
 ### ST77916 QSPI LCD Display
 
