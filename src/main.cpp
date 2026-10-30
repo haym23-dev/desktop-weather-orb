@@ -1,20 +1,22 @@
-#include <Arduino.h>
-#include <ST77916_QSPI.h>
-#include <P5.h>
-#include <memory>
-#include <cstdint>
-
 #include "wifi_helper.h"
 #include "lcd_helper.h"
 
+#include <Arduino.h>
+#include <ST77916_QSPI.h>
+#include <P5.h>
+
+#include <memory>
+#include <cstdint>
+
 namespace {
-  constexpr uint8_t SCL_PIN = 18;
-  constexpr uint8_t SDA_PIN = 23;
-  constexpr uint8_t IO1_PIN = 19;
-  constexpr uint8_t IO2_PIN = 22;
-  constexpr uint8_t IO3_PIN = 21;
-  constexpr uint8_t CS_PIN  = 5;
-  constexpr uint8_t RST_PIN = 4;
+  constexpr uint8_t SCL_PIN = 12;
+  constexpr uint8_t SDA_PIN = 11;
+  constexpr uint8_t IO1_PIN = 13;
+  constexpr uint8_t IO2_PIN = 5;
+  constexpr uint8_t IO3_PIN = 9;
+  constexpr uint8_t RST_PIN = 8;
+  constexpr uint8_t CS_PIN  = 10;
+  constexpr uint8_t BL_PIN  = -1;
 
   // Like std::make_unique, but returns nullptr on allocation failure instead of
   // throwing/aborting, so a low-heap condition can be reported over Serial.
@@ -40,7 +42,10 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  connectToWifi();
+  // connectToWifi();
+  Serial.printf("PSRAM: %u bytes\n", ESP.getPsramSize());
+  Serial.printf("Largest free block: %u bytes\n",
+              heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
 
   // Initialize display vars
   tft = makeUniqueNoThrow<ST77916_QSPI_GFX>(
@@ -51,7 +56,7 @@ void setup() {
     IO3_PIN,
     RST_PIN,
     CS_PIN,
-    5           // TODO backlight pin
+    BL_PIN
   );
 
   if (!tft) {
@@ -67,15 +72,22 @@ void setup() {
     halt("display init");
   }
 
+  Serial.println("Set up TFT display");
+
   p5 = makeUniqueNoThrow<P5>(*tft);
   if (!p5) {
     halt("out of memory (p5)");
   }
 
+  Serial.println("Set up P5");
+
   display = makeUniqueNoThrow<LcdDisplay>(*tft, *p5);
   if (!display) {
     halt("out of memory (display)");
   }
+
+  Serial.println("Beginning display");
+
   display->begin();
 }
 
