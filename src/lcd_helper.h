@@ -17,15 +17,6 @@ public:
    */
   LcdDisplay(ST77916_QSPI_GFX& display, P5& p5) noexcept;
 
-  // Holds references to externally owned hardware: copying would create two
-  // objects driving one panel, so forbid it.
-  LcdDisplay(const LcdDisplay&) = delete;
-  LcdDisplay& operator=(const LcdDisplay&) = delete;
-  LcdDisplay(LcdDisplay&&) = delete;
-  LcdDisplay& operator=(LcdDisplay&&) = delete;
-  ~LcdDisplay() = default;
-
-
   /**
    * Call once display has started
    */
@@ -44,25 +35,7 @@ public:
   void setNegative(bool negative) noexcept;
 
 private:
-  struct Frame {
-    float u;    // 0..1 progress through the current movement
-    float t;    // seconds since begin()
-    float env;  // grow in / hold / collapse-out envelope, 0..1
-  };
-
-  // Array of all of the movements from this class
-  using Movement = void (LcdDisplay::*)(const Frame&);
-  static const std::array<Movement, 6> kMovements;
-
-  void timesTable(const Frame& f);
-  void polygons(const Frame& f);
-  void comb(const Frame& f);
-  void harmonograph(const Frame& f);
-  void moire(const Frame& f);
-  void flow(const Frame& f);
-
   void reportStats(std::size_t movement, std::uint32_t drawUs);
-
 
   // References to display and P5, defined in main
   ST77916_QSPI_GFX& tft_;

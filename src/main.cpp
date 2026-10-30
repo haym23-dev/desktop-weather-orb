@@ -5,7 +5,6 @@
 #include <ST77916_QSPI.h>
 #include <P5.h>
 
-#include <memory>
 #include <cstdint>
 
 namespace {
@@ -16,39 +15,9 @@ namespace {
   constexpr uint8_t IO3_PIN = 9;
   constexpr uint8_t RST_PIN = 8;
   constexpr uint8_t CS_PIN  = 10;
-  constexpr uint8_t BL_PIN  = -1;
+  constexpr uint8_t BL_PIN  = -1;   // Set to HIGH
 
-  // Like std::make_unique, but returns nullptr on allocation failure instead of
-  // throwing/aborting, so a low-heap condition can be reported over Serial.
-  template <typename T, typename... Args>
-  std::unique_ptr<T> makeUniqueNoThrow(Args&&... args) {
-    return std::unique_ptr<T>(new (std::nothrow) T(std::forward<Args>(args)...));
-  }
-
-  // Single owners of LCD Display objects
-  std::unique_ptr<ST77916_QSPI_GFX> tft;
-  std::unique_ptr<P5> p5;
-  std::unique_ptr<LcdDisplay> display;
-
-  [[noreturn]] void halt(const char* why) {
-    Serial.printf("fatal: %s\n", why);
-    while (true) {
-      delay(1000);
-    }
-  }
-} // namespace
-
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-
-  // connectToWifi();
-  Serial.printf("PSRAM: %u bytes\n", ESP.getPsramSize());
-  Serial.printf("Largest free block: %u bytes\n",
-              heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
-
-  // Initialize display vars
-  tft = makeUniqueNoThrow<ST77916_QSPI_GFX>(
+  ST77916_QSPI_GFX tft(
     SCL_PIN,
     SDA_PIN,
     IO1_PIN,
@@ -58,39 +27,54 @@ void setup() {
     CS_PIN,
     BL_PIN
   );
+  P5 p5(tft);
+  LcdDisplay display(tft, p5);
 
-  if (!tft) {
-    halt("out of memory (tft)");
+  [[noreturn]] void halt(const char* why) {
+    Serial.printf("fatal: %s\n", why);
+    while (true) {
+      delay(1000);
+    }
   }
+} // namespace
+
+static void logPSRAM() {
+  Serial.println("--- PSRAM Diagnostics ---");
+  
+  // Check if the hardware detects PSRAM at all
+  if (psramInit()) {
+    Serial.println("PSRAM Hardware Initialized Successfully!");
+    
+    // Print total and free memory space
+    Serial.printf("Total PSRAM: %d bytes\n", ESP.getPsramSize());
+    Serial.printf("Free PSRAM:  %d bytes\n", ESP.getFreePsram());
+  } else {
+    Serial.println("PSRAM Initialization FAILED! Check your IDE/PlatformIO settings.");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+
+  logPSRAM();
+
+  // connectToWifi();
 
   ST77916_QSPI_GFX::Config cfg;
   cfg.clockHz = 70000000;   // 70 MHz
   cfg.doubleBuffer = true;
   cfg.pushTask = true;
-  if (!tft->begin(cfg)) {
-    Serial.printf("begin failed: %s\n", tft->lastError());
+  if (!tft.begin(cfg)) {
+    Serial.printf("begin failed: %s\n", tft.lastError());
     halt("display init");
-  }
-
-  Serial.println("Set up TFT display");
-
-  p5 = makeUniqueNoThrow<P5>(*tft);
-  if (!p5) {
-    halt("out of memory (p5)");
-  }
-
-  Serial.println("Set up P5");
-
-  display = makeUniqueNoThrow<LcdDisplay>(*tft, *p5);
-  if (!display) {
-    halt("out of memory (display)");
   }
 
   Serial.println("Beginning display");
 
-  display->begin();
+  display.begin();
 }
 
 void loop() {
-  display->update();
+  display.update();
 }
