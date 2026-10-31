@@ -1,5 +1,7 @@
 #include "wifi_helper.h"
 #include "lcd_helper.h"
+#include "led_orb.h"
+#include "weather_sunny.h"
 
 #include <Arduino.h>
 #include <ST77916_QSPI.h>
@@ -29,6 +31,17 @@ namespace {
   );
   P5 p5(tft);
   LcdDisplay display(tft, p5);
+
+  // --- LED orb -------------------------------------------------------------
+  // 30 LEDs at 30/m is ~1.0 m of strip, wound on a ~75 mm former as a
+  // ~4.2-turn helix (see LED_ORB.md for the physical build).
+  constexpr uint16_t LED_COUNT   = 30;
+  constexpr float    HELIX_TURNS = 4.2f;
+  constexpr uint32_t FRAME_MS    = 33;   // ~30 fps
+
+  orb::LedOrb ledOrb(LED_COUNT, HELIX_TURNS);
+  orb::SunnyParams sunny;
+  uint32_t lastFrameMs = 0;
 
   [[noreturn]] void halt(const char* why) {
     Serial.printf("fatal: %s\n", why);
@@ -71,10 +84,19 @@ void setup() {
   }
 
   Serial.println("Beginning display");
-
   display.begin();
+
+  Serial.println("Beginning LED orb");
+  ledOrb.begin();
 }
 
 void loop() {
+  const uint32_t now = millis();
+  if (now - lastFrameMs >= FRAME_MS) {
+    lastFrameMs = now;
+    orb::renderSunny(ledOrb.pixels(), ledOrb.points(), ledOrb.count(), sunny, now);
+    ledOrb.show();
+  }
+
   display.update();
 }

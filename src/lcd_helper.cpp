@@ -150,6 +150,44 @@ namespace {
     }
   }
 
+  // --------------------------------------------------------------------------
+  // Weather States
+  // --------------------------------------------------------------------------
+  /**
+   * Draw sun with rays
+   */
+  void drawSunny(P5& p5) {
+    p5.noStroke();
+    p5.fill(0xe565);
+    uint yPos = CY - 50.0f;
+    p5.circle(CX, yPos, 80);
+
+    // Sun rays
+    const uint8_t numTriangles = 6;
+    const uint8_t distance = 65;
+    const uint8_t triangleSize = 10;
+
+    // Draw sun rays
+    for (std::uint8_t i = 0; i < numTriangles; ++i) {
+      // Index to radian angle
+      const float angle = TAU * static_cast<float>(i) / static_cast<float>(numTriangles);
+      const float x = CX + std::cos(angle) * distance;
+      const float y = yPos + std::sin(angle) * distance;
+
+      p5.push();
+      p5.translate(x, y);
+      p5.rotate(angle + (TAU * 0.25f));
+      p5.triangle((-1.0f * triangleSize), triangleSize, 
+                    triangleSize, triangleSize, 
+                    0, (-1.0f * triangleSize));
+      
+      p5.pop();
+    }
+  }
+  // void drawCloudy();
+  // void drawRainy();
+  // void drawClearNight();
+
 
   // Array of all of the movements from this class
   using Movement = void (*)(P5&, const Frame&);
@@ -165,11 +203,12 @@ namespace {
 
 
 LcdDisplay::LcdDisplay(ST77916_QSPI_GFX& tft, P5& p5) noexcept :
-    tft_{tft}, p5_{p5}, paper_{ST77916_WHITE}, ink_{ST77916_BLACK}
+    tft_{tft}, p5_{p5}, paper_{ST77916_BLACK}, ink_{ST77916_WHITE}
 {}
 
 void LcdDisplay::begin() {
   p5_.noStroke();
+  p5_.background(paper_);
   p5_.stroke(ink_);
   p5_.noFill();
   p5_.noiseSeed(20260723);
@@ -183,22 +222,25 @@ void LcdDisplay::setNegative(bool negative) noexcept {
 }
 
 void LcdDisplay::update() {
-  const std::uint32_t now = millis() - t0_;
-  const std::size_t idx = (now / MOVEMENT_MS) % kMovements.size();
+  // const std::uint32_t now = millis() - t0_;
+  // const std::size_t idx = (now / MOVEMENT_MS) % kMovements.size();
 
-  Frame f{};
-  f.t = static_cast<float>(now) * 0.001f;
-  f.u = static_cast<float>(now % MOVEMENT_MS) / static_cast<float>(MOVEMENT_MS);
-  f.env = P5::smoothstep(0.0f, 0.18f, f.u) * (1.0f - P5::smoothstep(0.82f, 1.0f, f.u));
+  // Frame f{};
+  // f.t = static_cast<float>(now) * 0.001f;
+  // f.u = static_cast<float>(now % MOVEMENT_MS) / static_cast<float>(MOVEMENT_MS);
+  // f.env = P5::smoothstep(0.0f, 0.18f, f.u) * (1.0f - P5::smoothstep(0.82f, 1.0f, f.u));
 
-  const std::uint32_t tDraw = micros();
-  p5_.background(paper_);
-  p5_.stroke(ink_);
-  (kMovements.at(idx))(p5_, f);
-  const std::uint32_t drawUs = micros() - tDraw;
+  // const std::uint32_t tDraw = micros();
+  // p5_.background(paper_);
+  // p5_.stroke(ink_);
+  // (kMovements.at(idx))(p5_, f);
+  // const std::uint32_t drawUs = micros() - tDraw;
+
+  // Testing the sunny function
+  drawSunny(p5_);
 
   tft_.present();
-  reportStats(idx, drawUs);
+  // reportStats(idx, drawUs);
 }
 
 void LcdDisplay::reportStats(std::size_t movement, std::uint32_t drawUs) {
@@ -221,40 +263,3 @@ void LcdDisplay::reportStats(std::size_t movement, std::uint32_t drawUs) {
   stats_.frames = 0;
   stats_.accDrawUs = 0;
 }
-
-// --------------------------------------------------------------------------
-// Weather States
-// --------------------------------------------------------------------------
-/**
- * Draw sun with rays
- */
-void drawSunny(P5& p5) {
-  p5.noStroke();
-  p5.fill(0xe565);
-  p5.circle(CX, CY, 40);
-
-  // Sun rays
-  const uint8_t numTriangles = 5;
-  const uint8_t distance = 30;
-  const uint8_t triangleSize = 10;
-
-  // Draw sun rays
-  for (std::uint8_t i = 0; i < numTriangles; ++i) {
-    // Index to radian angle
-    const float angle = TAU * static_cast<float>(i) / static_cast<float>(numTriangles);
-    const float x = CX + std::cos(angle) * distance;
-    const float y = CY + std::sin(angle) * distance;
-
-    p5.push();
-    p5.translate(x, y);
-    p5.rotate(angle + (TAU * 0.25f));
-    p5.triangle((-1.0f * triangleSize), triangleSize, 
-                  triangleSize, triangleSize, 
-                  0, (-1.0f * triangleSize));
-    
-    p5.pop();
-  }
-}
-// void drawCloudy();
-// void drawRainy();
-// void drawClearNight();
