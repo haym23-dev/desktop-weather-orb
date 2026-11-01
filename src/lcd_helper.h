@@ -15,7 +15,7 @@ public:
    * @param display - QSPI object reference
    * @param p5 - P5 drawing object refernce
    */
-  LcdDisplay(ST77916_QSPI_GFX& display, P5& p5) noexcept;
+  LcdDisplay() noexcept;
 
   /**
    * Call once display has started
@@ -38,8 +38,8 @@ private:
   void reportStats(std::size_t movement, std::uint32_t drawUs);
 
   // References to display and P5, defined in main
-  ST77916_QSPI_GFX& tft_;
-  P5& p5_;
+  ST77916_QSPI_GFX tft_;
+  P5 p5_;
 
   std::uint16_t paper_;
   std::uint16_t ink_;

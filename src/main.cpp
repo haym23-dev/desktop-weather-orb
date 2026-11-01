@@ -10,27 +10,7 @@
 #include <cstdint>
 
 namespace {
-  constexpr uint8_t SCL_PIN = 12;
-  constexpr uint8_t SDA_PIN = 11;
-  constexpr uint8_t IO1_PIN = 13;
-  constexpr uint8_t IO2_PIN = 5;
-  constexpr uint8_t IO3_PIN = 9;
-  constexpr uint8_t RST_PIN = 8;
-  constexpr uint8_t CS_PIN  = 10;
-  constexpr uint8_t BL_PIN  = -1;   // Set to HIGH
-
-  ST77916_QSPI_GFX tft(
-    SCL_PIN,
-    SDA_PIN,
-    IO1_PIN,
-    IO2_PIN,
-    IO3_PIN,
-    RST_PIN,
-    CS_PIN,
-    BL_PIN
-  );
-  P5 p5(tft);
-  LcdDisplay display(tft, p5);
+  LcdDisplay display;
 
   // --- LED orb -------------------------------------------------------------
   // Enter two physical measurements; turns are derived so the firmware's
@@ -51,13 +31,6 @@ namespace {
   orb::LedOrb ledOrb(LED_COUNT, HELIX_TURNS);
   orb::SunnyParams sunny;
   uint32_t lastFrameMs = 0;
-
-  [[noreturn]] void halt(const char* why) {
-    Serial.printf("fatal: %s\n", why);
-    while (true) {
-      delay(1000);
-    }
-  }
 } // namespace
 
 static void logPSRAM() {
@@ -83,15 +56,6 @@ void setup() {
 
   // connectToWifi();
 
-  ST77916_QSPI_GFX::Config cfg;
-  cfg.clockHz = 70000000;   // 70 MHz
-  cfg.doubleBuffer = true;
-  cfg.pushTask = true;
-  if (!tft.begin(cfg)) {
-    Serial.printf("begin failed: %s\n", tft.lastError());
-    halt("display init");
-  }
-
   Serial.println("Beginning display");
   display.begin();
 
@@ -111,7 +75,6 @@ void loop() {
     lastFrameMs = now;
     orb::renderSunny(ledOrb.pixels(), ledOrb.points(), ledOrb.count(), sunny, now);
     ledOrb.show();
-
     display.update();
   }
 }
