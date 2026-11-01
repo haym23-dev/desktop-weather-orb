@@ -1,29 +1,30 @@
 #pragma once
 
-#include <FastLED.h>
+#include "orb_color.h"
+#include "orb_geometry.h"
+
+#include <Adafruit_NeoPixel.h>
 
 #include <cstdint>
 
-#include "orb_geometry.h"
-
 namespace orb {
 
-/**
- * Hard cap on strand length. Buffers below are sized for this so the orb owns
- * no heap, matching the rest of the firmware.
- */
+//Hard cap on strand length
 constexpr std::uint16_t MAX_LEDS = 256;
 
 /**
- * Data pin for the WS2812B strand (through the 74HCT245 level shifter).
+ * Data pin for the WS2812B strand (through the level shifter).
+ *
+ * Must NOT be one of the QSPI display pins (5, 8, 9, 10, 11, 12, 13)
  */
 constexpr std::uint8_t DATA_PIN = 4;
 
 /**
- * Owns the FastLED strand and the precomputed geometry of every LED.
+ * Owns the NeoPixel strand and the precomputed geometry of every LED.
  *
- * This class knows nothing about weather; it just hands out the pixel buffer
- * and the LED positions for a renderer (see weather_sunny.h) to fill in.
+ * This class knows nothing about weather; it just hands out an RGB
+ * framebuffer and the LED positions for a renderer (see weather_sunny.h) to
+ * fill in, then pushes that buffer to the strip on show().
  */
 class LedOrb {
 public:
@@ -35,8 +36,7 @@ public:
   LedOrb(std::uint16_t count, float turns, float startAngleRad = 0.0f) noexcept;
 
   /**
-   * Initialise FastLED, the power limiter, and precompute LED geometry.
-   * Call once, after Serial is up.
+   * Initialise the strip and precompute LED geometry. Call once, after Serial.
    */
   void begin();
 
@@ -46,12 +46,17 @@ public:
   void setBrightness(std::uint8_t brightness) noexcept;
 
   /**
-   * Push the current pixel buffer to the strand.
+   * Zero the framebuffer and the strip.
+   */
+  void clear() noexcept;
+
+  /**
+   * Push the current framebuffer to the strand.
    */
   void show() noexcept;
 
   std::uint16_t count() const noexcept { return count_; }
-  CRGB* pixels() noexcept { return pixels_; }
+  Rgb* pixels() noexcept { return pixels_; }
   const LedPoint* points() const noexcept { return points_; }
 
 private:
@@ -59,7 +64,9 @@ private:
   float turns_;
   float startAngle_;
 
-  CRGB pixels_[MAX_LEDS];
+  Adafruit_NeoPixel strip_;
+
+  Rgb pixels_[MAX_LEDS];
   LedPoint points_[MAX_LEDS];
 };
 

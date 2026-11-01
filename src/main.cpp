@@ -33,11 +33,20 @@ namespace {
   LcdDisplay display(tft, p5);
 
   // --- LED orb -------------------------------------------------------------
-  // 30 LEDs at 30/m is ~1.0 m of strip, wound on a ~75 mm former as a
-  // ~4.2-turn helix (see LED_ORB.md for the physical build).
-  constexpr uint16_t LED_COUNT   = 30;
-  constexpr float    HELIX_TURNS = 4.2f;
-  constexpr uint32_t FRAME_MS    = 33;   // ~30 fps
+  // Enter two physical measurements; turns are derived so the firmware's
+  // helix matches the winding you actually built. See LED_ORB.md.
+  constexpr float    CYLINDER_DIAMETER_MM = 25.4f;    // 1 in
+  constexpr float    STRIP_LENGTH_MM      = 1000.0f;  // 30 LEDs at 30/m
+  constexpr uint16_t LED_COUNT            = 30;
+
+  // One full turn wraps one circumference, so turns = strip length / circumference.
+  constexpr float HELIX_TURNS =
+      STRIP_LENGTH_MM / (static_cast<float>(PI) * CYLINDER_DIAMETER_MM);
+
+  constexpr uint32_t FRAME_MS = 33;   // ~30 fps
+
+  // Global output cap. Lower this first if the strip browns out.
+  constexpr uint8_t ORB_BRIGHTNESS = 80;
 
   orb::LedOrb ledOrb(LED_COUNT, HELIX_TURNS);
   orb::SunnyParams sunny;
@@ -88,6 +97,12 @@ void setup() {
 
   Serial.println("Beginning LED orb");
   ledOrb.begin();
+  ledOrb.setBrightness(ORB_BRIGHTNESS);
+  Serial.printf("LED orb: %u LEDs, %.2f turns, %.1f mm former dia, %.1f mm/lap\n",
+                static_cast<unsigned>(LED_COUNT),
+                HELIX_TURNS,
+                CYLINDER_DIAMETER_MM,
+                3.14159265f * CYLINDER_DIAMETER_MM);
 }
 
 void loop() {
@@ -96,7 +111,7 @@ void loop() {
     lastFrameMs = now;
     orb::renderSunny(ledOrb.pixels(), ledOrb.points(), ledOrb.count(), sunny, now);
     ledOrb.show();
-  }
 
-  display.update();
+    display.update();
+  }
 }
