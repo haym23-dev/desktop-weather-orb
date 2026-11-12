@@ -1,4 +1,5 @@
-#include "lcd_helper.h"
+#include "lcd_display.h"
+#include "weather_lcd.hpp"
 
 #include <Arduino.h>
 #include <ST77916_QSPI.h>
@@ -27,13 +28,6 @@ namespace {
   constexpr int8_t RST_PIN = 8;
   constexpr int8_t CS_PIN  = 10;
   constexpr int8_t BL_PIN  = -1;   // Set to HIGH
-
-  [[noreturn]] void halt(const char* why) {
-    Serial.printf("fatal: %s\n", why);
-    while (true) {
-      delay(1000);
-    }
-  }
 
   // --------------------------------------------------------------------------
   // Weather States
@@ -85,40 +79,40 @@ LcdDisplay::LcdDisplay() noexcept :
       RST_PIN,
       CS_PIN,
       BL_PIN,
-    }, p5_{tft_}, paper_{ST77916_BLACK}, ink_{ST77916_WHITE}
+    }, p5_{tft_}
 {
+}
+
+bool LcdDisplay::init() {
   ST77916_QSPI_GFX::Config cfg;
   cfg.clockHz = 70000000;   // 70 MHz
   cfg.doubleBuffer = true;
   cfg.pushTask = true;
 
   if (!tft_.begin(cfg)) {
-    Serial.printf("begin failed: %s\n", tft_.lastError());
-    halt("display init");
+    Serial.printf("tft begin failed: %s\n", tft_.lastError());
+    return false;
   }
+  return true;
 }
 
 void LcdDisplay::begin() {
   p5_.noStroke();
-  p5_.background(paper_);
-  p5_.stroke(ink_);
+  p5_.background(ST77916_BLACK);
+  p5_.stroke(ST77916_WHITE);
   p5_.noFill();
   p5_.noiseSeed(20260723);
   t0_ = millis();
   stats_ = {};
 }
 
-void LcdDisplay::setNegative(bool negative) noexcept {
-  paper_ = negative ? ST77916_BLACK : ST77916_WHITE;
-  ink_ = negative ? ST77916_WHITE : ST77916_BLACK;
-}
-
 void LcdDisplay::update() {
-  // Testing the sunny function
-  drawSunny(p5_);
-
+  // Clear first: with double buffering the next frame is drawn into the buffer
+  // shown two frames ago, so without this the animated sun smears across the
+  // panel instead of moving over a clean background.
+  p5_.background(ST77916_BLACK);
+  weatherShapes::drawSunny(p5_, CX, CY, 40);
   tft_.present();
-  // reportStats(idx, drawUs);
 }
 
 void LcdDisplay::reportStats(std::size_t movement, std::uint32_t drawUs) {

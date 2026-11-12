@@ -1,7 +1,7 @@
 #include "wifi_helper.h"
-#include "lcd_helper.h"
+#include "lcd_display.h"
 #include "led_orb.h"
-#include "weather_sunny.h"
+#include "led_sunny.h"
 
 #include <Arduino.h>
 #include <ST77916_QSPI.h>
@@ -52,11 +52,21 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
+  // 9 = brownout, 4 = panic/crash, 5/6/7 = watchdog. Useful when the board
+  // resets in a loop (the USB port re-enumerating is what the monitor sees as
+  // "Disconnected / Reconnecting").
+  Serial.printf("reset reason: %d\n", static_cast<int>(esp_reset_reason()));
+
   logPSRAM();
 
   // connectToWifi();
 
   Serial.println("Beginning display");
+  if (!display.init()) {
+    Serial.println("display init FAILED (continuing without panel)");
+  } else {
+    Serial.println("display init ok");
+  }
   display.begin();
 
   Serial.println("Beginning LED orb");

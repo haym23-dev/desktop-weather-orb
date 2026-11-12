@@ -3,19 +3,24 @@
 #include <ST77916_QSPI.h>
 #include <P5.h>
 
-#include <array>
-#include <cstdint>
-
 class LcdDisplay {
 
 public:
   /**
    * Constructor
-   * 
-   * @param display - QSPI object reference
-   * @param p5 - P5 drawing object refernce
    */
   LcdDisplay() noexcept;
+
+  /**
+   * Initialise the panel hardware (SPI bus + framebuffers + panel init).
+   *
+   * Deliberately NOT done in the constructor: the constructor runs before
+   * Serial/PSRAM are up, so a failure there is invisible and a halt() would
+   * stop setup() from ever running. Call from setup(), after logPSRAM().
+   *
+   * @return false if the panel could not be brought up (display left inert)
+   */
+  bool init();
 
   /**
    * Call once display has started
@@ -27,13 +32,6 @@ public:
    */
   void update();
 
-  /**
-   * Set background color
-   * 
-   * @param negative - White if true, black if false
-   */
-  void setNegative(bool negative) noexcept;
-
 private:
   void reportStats(std::size_t movement, std::uint32_t drawUs);
 
@@ -41,8 +39,6 @@ private:
   ST77916_QSPI_GFX tft_;
   P5 p5_;
 
-  std::uint16_t paper_;
-  std::uint16_t ink_;
   std::uint32_t t0_ { 0u };
 
   struct Stats {
