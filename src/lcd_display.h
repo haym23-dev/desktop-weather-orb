@@ -3,6 +3,13 @@
 #include <ST77916_QSPI.h>
 #include <P5.h>
 
+enum class WeatherState : uint8_t {
+  SUNNY = 0,
+  PARTLY_SUNNY,
+  CLOUDY,
+  Count
+};
+
 class LcdDisplay {
 
 public:
@@ -30,7 +37,7 @@ public:
   /**
    * Call every loop, draw one frame and present it
    */
-  void update();
+  void update(WeatherState state);
 
 private:
   void reportStats(std::size_t movement, std::uint32_t drawUs);

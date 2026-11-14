@@ -31,6 +31,13 @@ namespace {
   orb::LedOrb ledOrb(LED_COUNT, HELIX_TURNS);
   orb::SunnyParams sunny;
   uint32_t lastFrameMs = 0;
+
+  // Testing
+  constexpr uint16_t BUTTON_IN_PIN = 2;
+  constexpr uint8_t NUM_STATES = static_cast<uint8_t>(WeatherState::Count);
+  volatile bool buttonPressed = false;
+  volatile unsigned long lastInterruptTime = 0;
+  volatile WeatherState weatherState = WeatherState::SUNNY;
 } // namespace
 
 static void logPSRAM() {
@@ -45,6 +52,15 @@ static void logPSRAM() {
     Serial.printf("Free PSRAM:  %d bytes\n", ESP.getFreePsram());
   } else {
     Serial.println("PSRAM Initialization FAILED! Check your IDE/PlatformIO settings.");
+  }
+}
+
+void IRAM_ATTR handleButtonInterrupt() {
+  unsigned long interruptTime = millis();
+  // Poll at 200 ms to avoid bouncing on button
+  if (interruptTime - lastInterruptTime > 200) {
+    buttonPressed = true;
+    lastInterruptTime = interruptTime;
   }
 }
 
@@ -77,14 +93,24 @@ void setup() {
                 HELIX_TURNS,
                 CYLINDER_DIAMETER_MM,
                 3.14159265f * CYLINDER_DIAMETER_MM);
+
+  // For test cycling weather states
+  pinMode(BUTTON_IN_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(BUTTON_IN_PIN), handleButtonInterrupt, FALLING);
 }
 
 void loop() {
   const uint32_t now = millis();
   if (now - lastFrameMs >= FRAME_MS) {
     lastFrameMs = now;
-    orb::renderSunny(ledOrb.pixels(), ledOrb.points(), ledOrb.count(), sunny, now);
     ledOrb.show();
-    display.update();
+    orb::renderSunny(ledOrb.pixels(), ledOrb.points(), ledOrb.count(), sunny, now);
+    display.update(weatherState);
+
+    if (buttonPressed) {
+      buttonPressed = false;
+      Serial.println("Button pressed, changing state");
+      weatherState = static_cast<WeatherState>((static_cast<uint8_t>(weatherState) + 1) % NUM_STATES);
+    }
   }
 }
