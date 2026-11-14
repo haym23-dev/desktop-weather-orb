@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['secrets_0',['Secrets',['../namespace_secrets.html',1,'']]],
+  ['secrets_2eexample_2eh_1',['secrets.example.h',['../secrets_8example_8h.html',1,'']]],
+  ['secrets_2eh_2',['secrets.h',['../secrets_8h.html',1,'']]],
+  ['setbrightness_3',['setBrightness',['../classorb_1_1_led_orb.html#af0939d0475346171bb977d5a2f4c30da',1,'orb::LedOrb']]],
+  ['setup_4',['setup',['../main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'main.cpp']]],
+  ['show_5',['show',['../classorb_1_1_led_orb.html#a9f4ca05a01d993a16691e320292a2ea7',1,'orb::LedOrb']]],
+  ['ssid_5fname_6',['SSID_NAME',['../namespace_secrets.html#af8f5c74709990ae214becd7d0e240811',1,'Secrets']]],
+  ['startangle_5f_7',['startAngle_',['../classorb_1_1_led_orb.html#a827aec883499e985cc950354872a521d',1,'orb::LedOrb']]],
+  ['stats_8',['Stats',['../struct_lcd_display_1_1_stats.html',1,'LcdDisplay']]],
+  ['stats_5f_9',['stats_',['../class_lcd_display.html#a7f69f4bcaac6d85645ab921e883df756',1,'LcdDisplay']]],
+  ['strip_5f_10',['strip_',['../classorb_1_1_led_orb.html#ad958b90c75ca004717b370cdd72cb0d1',1,'orb::LedOrb']]],
+  ['sunambient_11',['sunAmbient',['../structorb_1_1_sunny_params.html#af6bc4dc482a2e2e2f31e401bc7b4cb9a',1,'orb::SunnyParams']]],
+  ['sunazimuthdeg_12',['sunAzimuthDeg',['../structorb_1_1_sunny_params.html#a49e8b8585cc1e9d752795845d1d05d78',1,'orb::SunnyParams']]],
+  ['suncolor_13',['sunColor',['../structorb_1_1_sunny_params.html#a503a69a094235ab5770fc7a058b17d4e',1,'orb::SunnyParams']]],
+  ['suncoredeg_14',['sunCoreDeg',['../structorb_1_1_sunny_params.html#a0a0e0b00cf10d4f3097fb5b1afb2af59',1,'orb::SunnyParams']]],
+  ['sunelevationdeg_15',['sunElevationDeg',['../structorb_1_1_sunny_params.html#a5b69db120a161f9885682030c3c028f1',1,'orb::SunnyParams']]],
+  ['sunglowdeg_16',['sunGlowDeg',['../structorb_1_1_sunny_params.html#a038624dae3c917569539d0a4cee5f95f',1,'orb::SunnyParams']]],
+  ['sunhotcolor_17',['sunHotColor',['../structorb_1_1_sunny_params.html#a827d1bc00a9223096384ba10c783d052',1,'orb::SunnyParams']]],
+  ['sunintensity_18',['sunIntensity',['../structorb_1_1_sunny_params.html#ad20081aab28a02ce2df9cdb6cead81bd',1,'orb::SunnyParams']]],
+  ['sunny_19',['SUNNY',['../lcd__display_8h.html#a414671cc608b94721f7887caee3325e4a1c75d402fb481523acd44e9d8247bc80',1,'lcd_display.h']]],
+  ['sunnyparams_20',['SunnyParams',['../structorb_1_1_sunny_params.html',1,'orb']]]
+];

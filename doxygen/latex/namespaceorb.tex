@@ -1,0 +1,100 @@
+\doxysection{orb Namespace Reference}
+\hypertarget{namespaceorb}{}\label{namespaceorb}\index{orb@{orb}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classorb_1_1_led_orb}{Led\+Orb}}
+\item 
+struct \doxymbox{\hyperlink{structorb_1_1_led_point}{Led\+Point}}
+\item 
+struct \doxymbox{\hyperlink{structorb_1_1_rgb}{Rgb}}
+\item 
+struct \doxymbox{\hyperlink{structorb_1_1_sunny_params}{Sunny\+Params}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{namespaceorb_a8ed0b2fb01bb6310414cce7799ea878f}{render\+Sunny}} (\doxymbox{\hyperlink{structorb_1_1_rgb}{Rgb}} \texorpdfstring{$\ast$}{*}pixels, const \doxymbox{\hyperlink{structorb_1_1_led_point}{Led\+Point}} \texorpdfstring{$\ast$}{*}points, std::\+uint16\+\_\+t count, const \doxymbox{\hyperlink{structorb_1_1_sunny_params}{Sunny\+Params}} \&params, std::\+uint32\+\_\+t time\+Ms) noexcept
+\item 
+\doxymbox{\hyperlink{structorb_1_1_led_point}{Led\+Point}} \doxymbox{\hyperlink{namespaceorb_a7d1f74c068763effe63b5936b3d8513d}{helix\+Point}} (std::\+uint16\+\_\+t index, std::\+uint16\+\_\+t count, float turns, float start\+Angle=0.\+0f) noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr std::\+uint16\+\_\+t \doxymbox{\hyperlink{namespaceorb_ab3ae9982909c07e77d637308684334a2}{MAX\+\_\+\+LEDS}} = 256
+\item 
+constexpr std::\+uint8\+\_\+t \doxymbox{\hyperlink{namespaceorb_ab432407c7e20b2b6578fbd5837d67c50}{DATA\+\_\+\+PIN}} = 4
+\end{DoxyCompactItemize}
+
+
+\label{namespaceorb_doc-func-members}
+\Hypertarget{namespaceorb_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceorb_a7d1f74c068763effe63b5936b3d8513d}\index{orb@{orb}!helixPoint@{helixPoint}}
+\index{helixPoint@{helixPoint}!orb@{orb}}
+\doxysubsubsection{\texorpdfstring{helixPoint()}{helixPoint()}}
+{\footnotesize\ttfamily \label{namespaceorb_a7d1f74c068763effe63b5936b3d8513d} 
+\doxymbox{\hyperlink{structorb_1_1_led_point}{Led\+Point}} orb::\+helix\+Point (\begin{DoxyParamCaption}\item[{std::\+uint16\+\_\+t}]{index}{, }\item[{std::\+uint16\+\_\+t}]{count}{, }\item[{float}]{turns}{, }\item[{float}]{start\+Angle}{ = {\ttfamily 0.0f}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+Map an LED index to its position on a bottom-\/to-\/top helical strand.
+
+The strip is wound once around the vertical axis: index 0 sits at the bottom pole and index {\ttfamily count -\/ 1} at the top pole. {\ttfamily turns} is how many full revolutions the strand makes over that span. All the sky effects are derived from the returned direction, so the winding handedness only changes which side of the orb a feature lands on, not whether it works.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & LED index, 0 .. count -\/ 1 (0 = bottom) \\
+\hline
+{\em count} & Total LEDs on the strand \\
+\hline
+{\em turns} & Full revolutions from bottom to top \\
+\hline
+{\em start\+Angle} & Azimuth (radians) of index 0 around the axis \\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespaceorb_a8ed0b2fb01bb6310414cce7799ea878f}\index{orb@{orb}!renderSunny@{renderSunny}}
+\index{renderSunny@{renderSunny}!orb@{orb}}
+\doxysubsubsection{\texorpdfstring{renderSunny()}{renderSunny()}}
+{\footnotesize\ttfamily \label{namespaceorb_a8ed0b2fb01bb6310414cce7799ea878f} 
+void orb::\+render\+Sunny (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structorb_1_1_rgb}{Rgb}} \texorpdfstring{$\ast$}{*}}]{pixels}{, }\item[{const \doxymbox{\hyperlink{structorb_1_1_led_point}{Led\+Point}} \texorpdfstring{$\ast$}{*}}]{points}{, }\item[{std::\+uint16\+\_\+t}]{count}{, }\item[{const \doxymbox{\hyperlink{structorb_1_1_sunny_params}{Sunny\+Params}} \&}]{params}{, }\item[{std::\+uint32\+\_\+t}]{time\+Ms}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+Render one frame of the sunny-\/day simulation into {\ttfamily pixels}.
+
+The scene is built purely from each LED\textquotesingle{}s direction on the orb:
+\begin{DoxyEnumerate}
+\item a vertical sky gradient (pale near the base, deep blue overhead),
+\item a warm sun disk with a wide glow falloff around {\ttfamily sun\+Azimuth\+Deg} / {\ttfamily sun\+Elevation\+Deg},
+\item seamless drifting cloud cover sampled from 3D value noise on the direction, which then shades the sun and lightens the sky.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em pixels} & Framebuffer to fill (count entries) \\
+\hline
+{\em points} & Precomputed LED geometry, parallel to {\ttfamily pixels} \\
+\hline
+{\em count} & Number of LEDs \\
+\hline
+{\em params} & Scene tuning \\
+\hline
+{\em time\+Ms} & Milliseconds since boot; drives the cloud drift \\
+\hline
+\end{DoxyParams}
+
+
+\label{namespaceorb_doc-var-members}
+\Hypertarget{namespaceorb_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespaceorb_ab432407c7e20b2b6578fbd5837d67c50}\index{orb@{orb}!DATA\_PIN@{DATA\_PIN}}
+\index{DATA\_PIN@{DATA\_PIN}!orb@{orb}}
+\doxysubsubsection{\texorpdfstring{DATA\_PIN}{DATA\_PIN}}
+{\footnotesize\ttfamily \label{namespaceorb_ab432407c7e20b2b6578fbd5837d67c50} 
+std::\+uint8\+\_\+t orb::\+\+DATA\+\_\+\+PIN = 4\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+Data pin for the WS2812B strand (through the level shifter).
+
+Must NOT be one of the QSPI display pins (5, 8, 9, 10, 11, 12, 13) \Hypertarget{namespaceorb_ab3ae9982909c07e77d637308684334a2}\index{orb@{orb}!MAX\_LEDS@{MAX\_LEDS}}
+\index{MAX\_LEDS@{MAX\_LEDS}!orb@{orb}}
+\doxysubsubsection{\texorpdfstring{MAX\_LEDS}{MAX\_LEDS}}
+{\footnotesize\ttfamily \label{namespaceorb_ab3ae9982909c07e77d637308684334a2} 
+std::\+uint16\+\_\+t orb::\+\+MAX\+\_\+\+LEDS = 256\hspace{0.3cm}{\ttfamily [constexpr]}}
+

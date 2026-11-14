@@ -1,0 +1,19 @@
+<map id="src/led_sunny.cpp" name="src/led_sunny.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,5,139,31"/>
+<area shape="rect" id="Node000002" href="$led__sunny_8h.html" title=" " alt="" coords="32,79,121,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,29,79,64,74,63,76,34"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="6,226,67,252"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="59,34,40,54,22,80,12,106,8,127,15,178,26,212,21,213,10,179,3,127,7,105,17,78,36,50,61,29"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="260,226,317,252"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="104,29,142,48,185,75,229,109,267,151,281,180,288,212,283,209,276,182,262,154,226,113,182,79,139,53,104,34"/>
+<area shape="rect" id="Node000003" href="$orb__color_8h.html" title=" " alt="" coords="34,153,119,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,102,79,137,74,136,76,107"/>
+<area shape="poly" id="edge8_Node000002_Node000004" title=" " alt="" coords="59,108,41,127,24,154,21,183,28,212,22,212,16,183,19,152,37,124,61,103"/>
+<area shape="rect" id="Node000005" href="$orb__geometry_8h.html" title=" " alt="" coords="143,153,252,178"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="97,103,166,143,162,146,97,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="72,177,53,214,48,211,68,180"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="171,181,79,222,77,217,169,176"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="160,226,236,252"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="200,177,200,212,196,209,196,180"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="214,176,264,217,259,217,212,181"/>
+</map>

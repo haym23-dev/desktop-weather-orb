@@ -1,0 +1,68 @@
+\doxysection{orb::Led\+Point Struct Reference}
+\hypertarget{structorb_1_1_led_point}{}\label{structorb_1_1_led_point}\index{orb::LedPoint@{orb::LedPoint}}
+
+
+{\ttfamily \+\#include $<$orb\+\_\+geometry.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \doxymbox{\hyperlink{structorb_1_1_led_point_ab02abefd9c03382483c6a40cfa9756bc}{x}} \{ 0.\+0f \}
+\item 
+float \doxymbox{\hyperlink{structorb_1_1_led_point_a2053372d3f42d8156ce9aab582a274e4}{y}} \{ 0.\+0f \}
+\item 
+float \doxymbox{\hyperlink{structorb_1_1_led_point_a02fcb2123ba3602516191c681c672e9a}{z}} \{ 0.\+0f \}
+\item 
+float \doxymbox{\hyperlink{structorb_1_1_led_point_a23ef61a5f121987185e4998806e715d2}{azimuth}} \{ 0.\+0f \}
+\item 
+float \doxymbox{\hyperlink{structorb_1_1_led_point_ab532df4ba8f476ffcd138c110dcdd0cc}{altitude}} \{ 0.\+0f \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A single addressable LED\textquotesingle{}s position on the orb.
+
+Directions are unit vectors in a right-\/handed frame with +Z pointing up (from the base of the orb toward its top):
+
++Z = up, the "{}zenith"{} of the sky -\/Z = down, the base +X = the 0 rad azimuth reference
+
+{\ttfamily \doxylink{structorb_1_1_led_point_a23ef61a5f121987185e4998806e715d2}{azimuth}} is how far the strand has wrapped around the vertical axis (it grows past 2\texorpdfstring{$\ast$}{*}pi as the helix climbs), and {\ttfamily \doxylink{structorb_1_1_led_point_ab532df4ba8f476ffcd138c110dcdd0cc}{altitude}} is a cheap 0..1 scalar for the vertical position (0 = bottom pole, 1 = top pole) used by the sky gradients. 
+
+\label{structorb_1_1_led_point_doc-variable-members}
+\Hypertarget{structorb_1_1_led_point_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structorb_1_1_led_point_ab532df4ba8f476ffcd138c110dcdd0cc}\index{orb::LedPoint@{orb::LedPoint}!altitude@{altitude}}
+\index{altitude@{altitude}!orb::LedPoint@{orb::LedPoint}}
+\doxysubsubsection{\texorpdfstring{altitude}{altitude}}
+{\footnotesize\ttfamily \label{structorb_1_1_led_point_ab532df4ba8f476ffcd138c110dcdd0cc} 
+float orb::\+\+Led\+Point::\+altitude \{ 0.\+0f \}}
+
+\Hypertarget{structorb_1_1_led_point_a23ef61a5f121987185e4998806e715d2}\index{orb::LedPoint@{orb::LedPoint}!azimuth@{azimuth}}
+\index{azimuth@{azimuth}!orb::LedPoint@{orb::LedPoint}}
+\doxysubsubsection{\texorpdfstring{azimuth}{azimuth}}
+{\footnotesize\ttfamily \label{structorb_1_1_led_point_a23ef61a5f121987185e4998806e715d2} 
+float orb::\+\+Led\+Point::\+azimuth \{ 0.\+0f \}}
+
+\Hypertarget{structorb_1_1_led_point_ab02abefd9c03382483c6a40cfa9756bc}\index{orb::LedPoint@{orb::LedPoint}!x@{x}}
+\index{x@{x}!orb::LedPoint@{orb::LedPoint}}
+\doxysubsubsection{\texorpdfstring{x}{x}}
+{\footnotesize\ttfamily \label{structorb_1_1_led_point_ab02abefd9c03382483c6a40cfa9756bc} 
+float orb::\+\+Led\+Point::\+x \{ 0.\+0f \}}
+
+\Hypertarget{structorb_1_1_led_point_a2053372d3f42d8156ce9aab582a274e4}\index{orb::LedPoint@{orb::LedPoint}!y@{y}}
+\index{y@{y}!orb::LedPoint@{orb::LedPoint}}
+\doxysubsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily \label{structorb_1_1_led_point_a2053372d3f42d8156ce9aab582a274e4} 
+float orb::\+\+Led\+Point::\+y \{ 0.\+0f \}}
+
+\Hypertarget{structorb_1_1_led_point_a02fcb2123ba3602516191c681c672e9a}\index{orb::LedPoint@{orb::LedPoint}!z@{z}}
+\index{z@{z}!orb::LedPoint@{orb::LedPoint}}
+\doxysubsubsection{\texorpdfstring{z}{z}}
+{\footnotesize\ttfamily \label{structorb_1_1_led_point_a02fcb2123ba3602516191c681c672e9a} 
+float orb::\+\+Led\+Point::\+z \{ 0.\+0f \}}
+
+
+
+The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+src/\doxymbox{\hyperlink{orb__geometry_8h}{orb\+\_\+geometry.\+h}}\end{DoxyCompactItemize}
