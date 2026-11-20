@@ -1,7 +1,0 @@
-<map id="orb::LedOrb" name="orb::LedOrb">
-<area shape="rect" id="Node000001" title=" " alt="" coords="51,102,140,128"/>
-<area shape="rect" id="Node000002" href="$structorb_1_1_rgb.html" title=" " alt="" coords="5,5,77,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,43,74,77,90,102,85,102,70,79,53,47"/>
-<area shape="rect" id="Node000003" href="$structorb_1_1_led_point.html" title=" " alt="" coords="101,5,200,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,44,123,79,106,104,103,100,119,77,136,47"/>
-</map>
