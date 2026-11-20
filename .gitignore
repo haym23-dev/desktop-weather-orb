@@ -4,6 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 docs/
+doxygen/
 
 # Don't include secrets
 src/secrets.h
